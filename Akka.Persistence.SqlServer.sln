@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D8BAD8E8-F881-4B23-8CCC-E5724CF9292B}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Persistence.SqlServer"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Persistence.SqlServer.Tests", "src\Akka.Persistence.SqlServer.Tests\Akka.Persistence.SqlServer.Tests.csproj", "{DEAC600E-5B71-4124-BE4B-5BF26C21575E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistenceExample", "src\PersistenceExample\PersistenceExample.csproj", "{1FC67D29-1455-4FF1-B2A4-949D59C7CFED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DEAC600E-5B71-4124-BE4B-5BF26C21575E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEAC600E-5B71-4124-BE4B-5BF26C21575E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEAC600E-5B71-4124-BE4B-5BF26C21575E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FC67D29-1455-4FF1-B2A4-949D59C7CFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FC67D29-1455-4FF1-B2A4-949D59C7CFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FC67D29-1455-4FF1-B2A4-949D59C7CFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FC67D29-1455-4FF1-B2A4-949D59C7CFED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
