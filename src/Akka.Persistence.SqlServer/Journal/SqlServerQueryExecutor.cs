@@ -65,7 +65,7 @@ namespace Akka.Persistence.SqlServer.Journal
                     {Configuration.SerializerIdColumnName} INTEGER NULL,
                     CONSTRAINT PK_{Configuration.JournalEventsTableName} PRIMARY KEY ({
                         Configuration.OrderingColumnName
-                    }),
+                    }) WITH (OPTIMIZE_FOR_SEQUENTIAL_KEY = ON),
                     CONSTRAINT UQ_{Configuration.JournalEventsTableName} UNIQUE ({
                         Configuration.PersistenceIdColumnName
                     }, {Configuration.SequenceNrColumnName})

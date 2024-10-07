@@ -12,18 +12,18 @@ using Xunit.Abstractions;
 
 namespace Akka.Persistence.SqlServer.Performance.Tests
 {
-    [Collection("SqlServerSpec")]
-    public class BatchingSqlServerJournalPerfSpec : JournalPerfSpec, IDisposable
+    [Collection(nameof(SqlServerSpecsNativeFixture))]
+    public class BatchingSqlServerJournalPerfSpec : SqlJournalPerfSpec
     {
-        public BatchingSqlServerJournalPerfSpec(ITestOutputHelper output, SqlServerFixture fixture)
+        public BatchingSqlServerJournalPerfSpec(ITestOutputHelper output, SqlServerNativeFixture fixture)
             : base(InitConfig(fixture), "BatchingSqlServerJournalPerfSpec", output)
         {
-            EventsCount = 1000;
+            EventsCount = 10000;
             ExpectDuration = TimeSpan.FromMinutes(10);
-            MeasurementIterations = 1;
+            MeasurementIterations = 100;
         }
 
-        private static Config InitConfig(SqlServerFixture fixture)
+        private static Config InitConfig(SqlServerNativeFixture fixture)
         {
             //need to make sure db is created before the tests start
             DbUtils.Initialize(fixture.ConnectionString);
@@ -47,15 +47,10 @@ namespace Akka.Persistence.SqlServer.Performance.Tests
             return ConfigurationFactory.ParseString(specString);
         }
 
-        protected void Dispose(bool disposing)
+        protected override void AfterAll()
         {
+            base.AfterAll();
             DbUtils.Clean();
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
         }
     }
 }

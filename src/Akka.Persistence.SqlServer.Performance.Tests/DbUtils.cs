@@ -18,8 +18,11 @@ namespace Akka.Persistence.SqlServer.Performance.Tests
         public static void Initialize(string connectionString)
         {
             _builder = new SqlConnectionStringBuilder(connectionString);
-            var databaseName = $"akka_persistence_tests_{Guid.NewGuid()}";
-            _builder.InitialCatalog = databaseName;
+            var databaseName = _builder.InitialCatalog;
+            if(string.IsNullOrWhiteSpace(databaseName))
+            {
+                _builder.InitialCatalog = databaseName = $"akka_persistence_tests_{Guid.NewGuid()}";
+            }
             
             var connectionBuilder = new SqlConnectionStringBuilder(connectionString)
             {
@@ -32,26 +35,39 @@ namespace Akka.Persistence.SqlServer.Performance.Tests
 
                 using (var cmd = new SqlCommand())
                 {
-                    cmd.CommandText = $@"
-IF db_id('{databaseName}') IS NULL
-BEGIN
-    CREATE DATABASE [{databaseName}];
-END";
+                    cmd.CommandText = 
+                        $"""
+                        IF db_id('{databaseName}') IS NOT NULL
+                        BEGIN
+                           ALTER DATABASE [{databaseName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                           DROP DATABASE [{databaseName}];
+                        END
+                        """;
+                    cmd.Connection = conn;
+                    cmd.ExecuteScalar();
+                }
+
+                using (var cmd = new SqlCommand())
+                {
+                    cmd.CommandText = $"CREATE DATABASE [{databaseName}];";
                     cmd.Connection = conn;
                     cmd.ExecuteScalar();
                 }
             }
 
             // Delete local snapshot flat file database
-            var path = "./snapshots";
+            const string path = "./snapshots";
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
         }
 
         public static void Clean()
         {
-            var databaseName = $"akka_persistence_tests_{Guid.NewGuid()}";
-            _builder.InitialCatalog = databaseName;
+            var databaseName = _builder.InitialCatalog;
+            if(string.IsNullOrWhiteSpace(databaseName))
+            {
+                _builder.InitialCatalog = databaseName = $"akka_persistence_tests_{Guid.NewGuid()}";
+            }
             
             var connectionBuilder = new SqlConnectionStringBuilder(ConnectionString)
             {
@@ -64,19 +80,28 @@ END";
 
                 using (var cmd = new SqlCommand())
                 {
-                    cmd.CommandText = $@"
-IF db_id('{databaseName}') IS NULL
-BEGIN
-    CREATE DATABASE [{databaseName}];
-END
-";
+                    cmd.CommandText = 
+                        $"""
+                         IF db_id('{databaseName}') IS NOT NULL
+                         BEGIN
+                            ALTER DATABASE [{databaseName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                            DROP DATABASE [{databaseName}];
+                         END
+                         """;
+                    cmd.Connection = conn;
+                    cmd.ExecuteScalar();
+                }
+
+                using (var cmd = new SqlCommand())
+                {
+                    cmd.CommandText = $"CREATE DATABASE [{databaseName}];";
                     cmd.Connection = conn;
                     cmd.ExecuteScalar();
                 }
             }
 
             // Delete local snapshot flat file database
-            var path = "./snapshots";
+            const string path = "./snapshots";
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
         }

@@ -34,15 +34,7 @@ namespace Akka.Persistence.SqlServer.Performance.Tests
 
         public SqlServerFixture()
         {
-            DockerClientConfiguration config;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                config = new DockerClientConfiguration(new Uri("unix://var/run/docker.sock"));
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                config = new DockerClientConfiguration(new Uri("npipe://./pipe/docker_engine"));
-            else
-                throw new NotSupportedException($"Unsupported OS [{RuntimeInformation.OSDescription}]");
-
-            Client = config.CreateClient();
+            Client = new DockerClientConfiguration().CreateClient();
         }
 
         protected string ImageName => "mcr.microsoft.com/mssql/server";
@@ -155,7 +147,8 @@ namespace Akka.Persistence.SqlServer.Performance.Tests
                 ["Server"] = $"localhost,{sqlServerHostPort}",
                 ["Database"] = "akka_persistence_tests",
                 ["User Id"] = "sa",
-                ["Password"] = "l0l!Th1sIsOpenSource"
+                ["Password"] = "l0l!Th1sIsOpenSource",
+                ["TrustServerCertificate"] = "true",
             };
 
             ConnectionString = connectionString.ToString();
